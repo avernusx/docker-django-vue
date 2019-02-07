@@ -17,3 +17,16 @@ services:
       - "8000:8000"
     volumes:
       - ./django:/django
+  vue:
+    build: ./docker/vue
+    depends_on:
+      - django
+    volumes:
+      - ./vue:/var/www
+      - ./docker/vue/start.sh:/usr/bin/start.sh
+    entrypoint: /bin/bash
+    command: start.sh
+    ports:
+      - "3000:3000"
+    environment:
+      - ENV
