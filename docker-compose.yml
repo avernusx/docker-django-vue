@@ -1,0 +1,19 @@
+version: '2.1'
+services:
+  postgresql:
+    build: ./docker/postgresql
+    environment:
+      - PGDATA=/var/lib/postgresql/vue
+    volumes:
+      - ./volumes/postgresql:/var/lib/postgresql/vue
+    ports:
+      - "127.0.0.1:${PG_EXTERNAL_PORT:-5432}:5432"
+  django:
+    build: ./docker/django
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - postgresql
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django:/django
