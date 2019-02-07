@@ -30,3 +30,16 @@ services:
       - "3000:3000"
     environment:
       - ENV
+  nginx:
+    image: openresty/openresty:xenial
+    depends_on:
+      - vue
+    volumes:
+      - ./docker/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./docker/nginx/default.conf:/usr/local/openresty/nginx/conf/conf.d/default.conf
+      - ./docker/nginx/start.sh:/usr/bin/start.sh
+      - ./volumes/log:/var/log
+    ports:
+     - 127.0.0.1:${NGINX_EXTERNAL_PORT:-9000}:80
+    entrypoint: /bin/bash
+    command: start.sh
